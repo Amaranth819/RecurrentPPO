@@ -2,6 +2,7 @@ import argparse
 import os
 import yaml
 from ppo import PPO
+from dynamics.halfcheetah import HalfCheetahEnv_ChangeDynamics
 
 
 if __name__ == '__main__':
@@ -15,7 +16,7 @@ if __name__ == '__main__':
     # Env
     ppo_parser.add_argument('--env_id', default = 'HalfCheetah-v4')
     ppo_parser.add_argument('--n_envs', default = 16)
-    ppo_parser.add_argument('--env_class', default = None)
+    ppo_parser.add_argument('--env_class', type = str, default = None)
 
     # Actor-Critic
     ppo_parser.add_argument('--actor_lr', default = 0.0003)
@@ -49,22 +50,25 @@ if __name__ == '__main__':
     '''
         Parse the arguments
     '''
-    config = vars(parser.parse_args())
+    config = parser.parse_args()
 
     for group in parser._action_groups:
         if group.title == 'ppo':
             ppo_dict = {a.dest : getattr(config, a.dest, a.default) for a in group._group_actions}
+            print('ppo', ppo_dict)
         elif group.title == 'training':
             training_dict = {a.dest : getattr(config, a.dest, a.default) for a in group._group_actions}
+            print('training', training_dict)
 
     # Save the configuration file to .yaml format
-    if not os.path.exists(config['save_root_dir']):
-        os.mkdir(config['save_root_dir'])
+    if not os.path.exists(config.save_root_dir):
+        os.mkdir(config.save_root_dir)
 
-    with open(os.path.join(config['save_root_dir'], 'config.yaml'), 'w') as f:
+    with open(os.path.join(config.save_root_dir, 'config.yaml'), 'w') as f:
         yaml.dump(config, f)
 
     # Create PPO
+    ppo_dict['env_class'] = eval(ppo_dict['env_class'])
     algo = PPO(**ppo_dict)
 
     if training_dict['load_from_path']:
