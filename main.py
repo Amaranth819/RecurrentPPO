@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # Hyperparameters
     ppo_parser.add_argument('--batch_size', default = 16)
     ppo_parser.add_argument('--repeat_batch', default = 2)
-    ppo_parser.add_argument('--epsilon', default = 2)
+    ppo_parser.add_argument('--epsilon', default = 0.2)
     ppo_parser.add_argument('--gamma', default = 0.99)
     ppo_parser.add_argument('--gae_lambda', default = 0.95)
     ppo_parser.add_argument('--device', default = 'auto')
