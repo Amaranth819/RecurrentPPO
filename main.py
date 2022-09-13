@@ -14,26 +14,27 @@ if __name__ == '__main__':
     ppo_parser = parser.add_argument_group('ppo')
 
     # Env
-    ppo_parser.add_argument('--env_id', default = 'HalfCheetah-v4')
-    ppo_parser.add_argument('--n_envs', default = 16)
+    ppo_parser.add_argument('--env_id', type = str, default = 'HalfCheetah-v4')
+    ppo_parser.add_argument('--n_envs', type = int, default = 16)
     ppo_parser.add_argument('--env_class', type = str, default = None)
 
     # Actor-Critic
-    ppo_parser.add_argument('--actor_lr', default = 0.0003)
-    ppo_parser.add_argument('--critic_lr', default = 0.001)
-    ppo_parser.add_argument('--a2c_share_rnn', default = True)
-    ppo_parser.add_argument('--rnn_type', default = 'lstm')
-    ppo_parser.add_argument('--rnn_hidden_dim', default = 256)
-    ppo_parser.add_argument('--num_rnn_layers', default = 2)
-    ppo_parser.add_argument('--action_fixed_std', default = 0.5)
+    ppo_parser.add_argument('--actor_lr', type = float, default = 0.0003)
+    ppo_parser.add_argument('--critic_lr', type = float, default = 0.001)
+    ppo_parser.add_argument('--a2c_share_rnn', type = bool, default = True)
+    ppo_parser.add_argument('--rnn_type', type = str, default = 'lstm')
+    ppo_parser.add_argument('--rnn_hidden_dim', type = int, default = 256)
+    ppo_parser.add_argument('--num_rnn_layers', type = int, default = 2)
+    ppo_parser.add_argument('--action_fixed_std', type = float, default = 0.5)
 
     # Hyperparameters
-    ppo_parser.add_argument('--batch_size', default = 16)
-    ppo_parser.add_argument('--repeat_batch', default = 2)
-    ppo_parser.add_argument('--epsilon', default = 0.2)
-    ppo_parser.add_argument('--gamma', default = 0.99)
-    ppo_parser.add_argument('--gae_lambda', default = 0.95)
-    ppo_parser.add_argument('--device', default = 'auto')
+    ppo_parser.add_argument('--batch_size', type = int, default = 16)
+    ppo_parser.add_argument('--repeat_batch', type = int, default = 2)
+    ppo_parser.add_argument('--epsilon', type = float, default = 0.2)
+    ppo_parser.add_argument('--gamma', type = float, default = 0.99)
+    ppo_parser.add_argument('--gae_lambda', type = float, default = 0.95)
+    ppo_parser.add_argument('--vloss_coef', type = float, default = 0.1)
+    ppo_parser.add_argument('--device', type = str, default = 'auto')
 
     '''
         For training setup
@@ -41,11 +42,11 @@ if __name__ == '__main__':
     training_parser = parser.add_argument_group('training')
 
     # Training settings
-    training_parser.add_argument('--load_from_path', default = None)
-    training_parser.add_argument('--save_root_dir', default = './PPO/')
-    training_parser.add_argument('--epochs', default = 1)
-    training_parser.add_argument('--eval_frequency', default = None)
-    training_parser.add_argument('--record_video', default = True)
+    training_parser.add_argument('--load_from_path', type = str, default = None)
+    training_parser.add_argument('--save_root_dir', type = str, default = './PPO/')
+    training_parser.add_argument('--epochs', type = int, default = 1000)
+    training_parser.add_argument('--eval_frequency', type = int, default = None)
+    training_parser.add_argument('--record_video', type = bool, default = True)
 
     '''
         Parse the arguments
