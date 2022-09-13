@@ -46,7 +46,13 @@ if __name__ == '__main__':
     training_parser.add_argument('--save_root_dir', type = str, default = './PPO/')
     training_parser.add_argument('--epochs', type = int, default = 1000)
     training_parser.add_argument('--eval_frequency', type = int, default = None)
-    training_parser.add_argument('--record_video', type = bool, default = True)
+
+    '''
+        For recording videos
+    '''
+    recording_parser = parser.add_argument_group('record')
+    recording_parser.add_argument('--load_model', type = str, default = None)
+    recording_parser.add_argument('--target_video_path', type = str, default = None)
 
     '''
         Parse the arguments
@@ -60,12 +66,15 @@ if __name__ == '__main__':
         elif group.title == 'training':
             training_dict = {a.dest : getattr(config, a.dest, a.default) for a in group._group_actions}
             print('training', training_dict)
+        elif group.title == 'record':
+            record_dict = {a.dest : getattr(config, a.dest, a.default) for a in group._group_actions}
+            print('record', record_dict)
 
     # Save the configuration file to .yaml format
-    if not os.path.exists(config.save_root_dir):
-        os.mkdir(config.save_root_dir)
+    if not os.path.exists(training_dict['save_root_dir']):
+        os.mkdir(training_dict['save_root_dir'])
 
-    with open(os.path.join(config.save_root_dir, 'config.yaml'), 'w') as f:
+    with open(os.path.join(training_dict['save_root_dir'], 'config.yaml'), 'w') as f:
         yaml.dump(config, f)
 
     # Create PPO
@@ -90,15 +99,7 @@ if __name__ == '__main__':
     algo.save(target_model_path)
 
     # Record video
-    if training_dict['record_video']:
-        if os.path.exists(target_model_path):
-            algo.load(target_model_path)
-            algo.record_video(os.path.join(training_dict['save_root_dir'], 'curr.mp4'))
-        else:
-            print('Directory %s not existing!' % target_model_path)
-
-        if os.path.exists(best_model_path):
-            algo.load(best_model_path)
-            algo.record_video(os.path.join(training_dict['save_root_dir'], 'best.mp4'))
-        else:
-            print('Directory %s not existing!' % best_model_path)
+    if record_dict['target_video_path'] is not None:
+        print('Recording a video!')
+        algo.load(record_dict['load_model'])
+        algo.record_video(record_dict['target_video_path'])

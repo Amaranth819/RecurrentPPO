@@ -1,0 +1,1 @@
+python -u main.py --env_class 'HalfCheetahEnv_ChangeDynamics' --epochs 10000

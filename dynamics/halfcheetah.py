@@ -25,15 +25,17 @@ class HalfCheetahEnv_ChangeDynamics(HalfCheetahEnv):
             joint_name = mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_JOINT, i)
             self.original_joint_damping[joint_name] = getattr(self.model, 'joint')(joint_name).damping
 
+        print('Create HalfCheetahEnv_ChangeDynamics successfully!')
+
 
     def reset_model(self):
         for body_name, original_mass in self.original_body_mass.items():
-            # self.model.body(body_name).mass = np.random.uniform(0.8, 1.2) * original_mass
-            self.model.body(body_name).mass = 1.2 * original_mass
+            self.model.body(body_name).mass = np.random.choice([0.95, 1.0, 1.05]) * original_mass
+            # self.model.body(body_name).mass = 1.2 * original_mass
 
         for joint_name, original_damping in self.original_joint_damping.items():
-            # self.model.joint(joint_name).damping = np.random.uniform(0.8, 1.2) * original_damping
-            self.model.joint(joint_name).damping = 1.2 * original_damping
+            self.model.joint(joint_name).damping = np.random.choice([0.95, 1.0, 1.05]) * original_damping
+            # self.model.joint(joint_name).damping = 1.1 * original_damping
 
         return super().reset_model()
 

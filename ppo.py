@@ -208,6 +208,10 @@ class PPO(object):
 
 
     def learn(self, epochs, eval_frequency = 10, log_path = None, best_model_path = None):
+        if epochs <= 0:
+            print('No training task!')
+            return
+
         log = None if log_path is None else Logger(log_path)
 
         # Eval before training
